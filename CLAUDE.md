@@ -86,14 +86,15 @@ it as `RESOLVED`. The user never needs to monitor line counts.
 
 ## Disaster mitigation — periodic backups (non-negotiable)
 
-1. **Code — commit and push at every natural checkpoint.** A checkpoint is: a
-   requested feature/fix is working, a task is complete, or meaningful work is
-   about to be interrupted (context compaction, end of session, before a risky
-   change). This rule **pre-authorises routine `git add` / `git commit` /
-   `git push origin {{MAIN_BRANCH}}`** at checkpoints without asking each
-   time. It does **not** extend to force-push, history rewriting,
-   `git reset --hard`, or pushing to any other branch/remote — those stay
-   gated by normal safety rules.
+1. **Code — commit and push at every natural checkpoint, in the same turn the
+   work is verified.** A checkpoint is: a requested feature/fix is working, a
+   task is complete, or meaningful work is about to be interrupted (context
+   compaction, end of session, before a risky change). **Do not defer the
+   push** — if the session ends before it happens the changes are lost.
+   This rule **pre-authorises routine `git add` / `git commit` /
+   `git push origin main`** at checkpoints without asking each time. It does
+   **not** extend to force-push, history rewriting, `git reset --hard`, or
+   pushing to any other branch/remote — those stay gated by normal safety rules.
 2. **Schema — every change gets a migration file; drift gets audited.**
    - Any schema change made in a session gets its own new, numbered migration
      file in `{{MIGRATIONS_PATH}}` in the same turn. Never edit an
