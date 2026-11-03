@@ -124,3 +124,14 @@ the docs and the CLAUDE.md in a state a stranger could pick up.
   not source code. Record its path in the project `CLAUDE.md` → Source of
   truth, build from it, and where the shipped code differs, the live code
   wins — flag the drift.
+
+## Deploy to Vercel
+Vercel connector is active in Claude Desktop.
+**New project:**
+Use the Vercel connector to create a new project and link the GitHub repo.
+Then push to main branch — Vercel auto-deploys.
+**Existing project:**
+Just commit and push to GitHub — Vercel auto-deploys from main branch automatically.
+**Direct deploy if needed:**
+vercel --prod --yes
+(Vercel CLI is installed and authenticated globally)
