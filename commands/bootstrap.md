@@ -21,10 +21,19 @@ points, router, every migration / schema file, `.env.example` and env
 references in code, build/lint/test config, hosting config, `.gitignore`,
 `git remote -v`. Fill every `{{PLACEHOLDER}}` from what the code actually
 does. Treat any existing README, spec or old docs as *claims to verify*, not
-facts to copy.
+facts to copy. Then run the typecheck, lint and test commands you found,
+once each, and record what you observed under the Commands table as
+`Baseline (<date>): typecheck PASS · lint 3 errors · tests 41/41`. Do not
+fix failures here; add each one to the backlog (section 5).
 
-**Empty / greenfield folder**: run the kickoff interview from the template's
-bootstrap section, in one batch. Fill what is decided; mark the rest `TBD`.
+**Approved spec, no application code yet** (`docs/PRODUCT-SPEC.md` is
+APPROVED): do not interview. Fill the file from `docs/PRODUCT-SPEC.md`,
+`docs/ARCHITECTURE.md` and `docs/DECISIONS.md`, and mark whatever they do
+not settle `TBD`. Header source: `approved spec, no code yet`.
+
+**Empty / greenfield folder with no approved spec**: run the kickoff
+interview from the template's bootstrap section, in one batch. Fill what is
+decided; mark the rest `TBD`.
 
 ## 2. Verification discipline
 
@@ -103,6 +112,11 @@ In `CLAUDE.md` → "Detailed references", mark each rule `present` or `n/a`.
   `.env.local` only.
 - `.gitignore` covers: `.env*` with `!.env.example`, build output,
   `CLAUDE.local.md`, `.claude/settings.local.json`.
+- Backlog: if the project has no backlog file, copy
+  `~/.claude/templates/build/docs/BACKLOG.md` to `docs/BACKLOG.md` and record
+  its path in `CLAUDE.md` → Source of truth. Add a line for every failing
+  baseline command and every `WARNING:` you recorded. This is where problems
+  noticed later get logged (see the global rules), so it must exist.
 
 ## 6. Finish
 
@@ -111,5 +125,6 @@ In `CLAUDE.md` → "Detailed references", mark each rule `present` or `n/a`.
 - Commit: `docs: bootstrap CLAUDE.md from template` (include `.claude/rules/`).
 - Push if a remote exists.
 - Report in ≤10 lines: what was verified, what is `UNVERIFIED:` or `TBD`,
-  which rules files were created, and any `WARNING:` items the user should
-  look at.
+  the baseline results, which rules files were created, and any `WARNING:`
+  items the user should look at. For an existing codebase, finish by
+  recommending `/audit` for a full health check.

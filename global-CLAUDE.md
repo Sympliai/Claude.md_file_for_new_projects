@@ -1,11 +1,18 @@
 # Global Claude Instructions — all projects
-# Install at: ~/.claude/CLAUDE.md
-# Companions: ~/.claude/settings.json (enforced permissions),
-#             ~/.claude/commands/ (/bootstrap, /retrofit, /checkpoint, /start, /discover,
-#             /setup-build, /plan-phases, /run-phase, /new-agent),
-#             ~/.claude/agents/ (reviewer subagents),
-#             ~/.claude/templates/CLAUDE.md + templates/build/ (project templates).
-# Project CLAUDE.md files ADD to this file; they should not repeat it.
+
+<!--
+Maintainer notes (Claude Code strips this comment before loading the file).
+Installed at ~/.claude/CLAUDE.md by install.sh in the kit repo. Edit it there,
+not here, then run install.sh again.
+Companions: ~/.claude/settings.json (enforced permissions and the guard hook),
+  ~/.claude/hooks/kit/kit-guard.py (secret-file and commit guard),
+  ~/.claude/commands/ (/start, /discover, /setup-build, /plan-phases,
+  /run-phase, /audit, /bootstrap, /retrofit, /checkpoint, /new-agent),
+  ~/.claude/agents/ (reviewer subagents),
+  ~/.claude/templates/CLAUDE.md + templates/build/ (project templates).
+-->
+
+Project `CLAUDE.md` files ADD to this file; they should not repeat it.
 
 ## Who you're working with
 
@@ -61,19 +68,48 @@ the docs and the CLAUDE.md in a state a stranger could pick up.
   `git push origin main` on the project's own repo is allow-listed in
   `~/.claude/settings.json`. Force-push, history rewriting and hard resets are
   denied there; if one is ever needed, explain why and let the user run it.
+- Phased builds are the exception to pushing `main`: where
+  `.claude/rules/build-workflow.md` exists, phase work is committed and pushed
+  on its `phase-NN-<slug>` branch, and `main` moves only when the user
+  approves the phase gate.
 - Secrets: never print, log or commit secret values, and never ask for or
   accept them in chat. When a key is needed, name the variable, say it goes
   in `.env.local`, and stop. Env var *names* may appear in docs and
   `.env.example`; values live only in `.env.local` (or the host's environment
   settings). Do not read `.env*` other than `.env.example`, or any
   `PROJECT KEYS/` folder, and do not create files of key values inside a repo.
+  A guard hook blocks these reads and scans each commit for key-shaped
+  strings. If it blocks something, do not look for a way round it: report
+  the file and line it named and let the user decide.
 - Never edit an already-committed migration in place — add a new numbered one.
   Ask before any migration that alters or drops existing columns.
-- Do not refactor, rename or "clean up" outside the current task's scope.
+- Do not refactor, rename or "clean up" outside the current task's scope
+  (the one exception is under "Problems noticed outside the task").
 - Do not build speculative features or anything from planning docs unless
   explicitly asked.
 - Destructive operations (dropping columns/tables, bulk file deletion,
   irreversible API calls) always get confirmed first.
+
+## Problems noticed outside the task
+
+Staying in scope does not mean staying silent. When you notice a problem the
+task did not ask about (security, UI/UX, accessibility, workflow, a bug, tech
+debt), do exactly one of these:
+
+- **Fix it now** only if all of this is true: it is in a file this task is
+  already editing; it is a few lines; it is plainly a defect, not a matter of
+  taste; and it needs no new dependency, schema change or design decision.
+  Report each such fix in one line.
+- **Otherwise log it.** Add one line to the project's backlog (`docs/BACKLOG.md`
+  unless `CLAUDE.md` names another file; create it from
+  `~/.claude/templates/build/docs/BACKLOG.md` if missing): area, severity,
+  `file:line`, the problem, the recommended fix. Commit it with the task.
+- A critical or high **security** problem (exposed secret, missing access
+  check, one user able to reach another's data) is never only logged: say so
+  at the top of the reply with the recommended fix, and ask.
+
+End the reply (or checkpoint) with the number of backlog lines added and the
+worst severity among them. For a full review of a codebase, suggest `/audit`.
 
 ## Working style
 
@@ -103,8 +139,11 @@ the docs and the CLAUDE.md in a state a stranger could pick up.
   `/plan-phases` with approval gates, then hands over `/run-phase` or a
   bounded `/goal`. Implementation never starts before the
   spec, stack and the phase are approved.
+- Existing codebase: `/start` documents it (`/bootstrap` or `/retrofit`),
+  then runs `/audit`, which reports findings with recommended fixes. Nothing
+  is fixed until the user chooses; larger fixes are planned as phases.
 - Generic reviewer agents live in `~/.claude/agents/` (workflow-tester,
-  visual-reviewer, security-reviewer, accessibility-reviewer,
+  visual-reviewer, ux-reviewer, security-reviewer, accessibility-reviewer,
   content-reviewer, phase-auditor). Reviewers report; they never edit.
 - If a task needs a specialist none of them covers, propose a new agent
   (`/new-agent`) and ask before creating it.
@@ -125,13 +164,15 @@ the docs and the CLAUDE.md in a state a stranger could pick up.
   truth, build from it, and where the shipped code differs, the live code
   wins — flag the drift.
 
-## Deploy to Vercel
-Vercel connector is active in Claude Desktop.
-**New project:**
-Use the Vercel connector to create a new project and link the GitHub repo.
-Then push to main branch — Vercel auto-deploys.
-**Existing project:**
-Just commit and push to GitHub — Vercel auto-deploys from main branch automatically.
-**Direct deploy if needed:**
-vercel --prod --yes
+## Deploying (Vercel)
+
+- Existing project: a push to `main` deploys to production through the GitHub
+  integration, so treat every push to `main` as a release. Pushing any other
+  branch builds a preview; give the user the preview URL when there is one.
+- New project: creating the Vercel project and linking the GitHub repo is
+  outward-facing. Propose it and wait for a yes. Use the Vercel connector if
+  this session has it; otherwise list the steps for the user.
+- Direct deploy from the CLI (`vercel --prod`) only when the user asks for it
+  in that message, and only after `vercel --version` shows the CLI is
+  installed. Never assume the CLI or the connector is available.
 (Vercel CLI is installed and authenticated globally)

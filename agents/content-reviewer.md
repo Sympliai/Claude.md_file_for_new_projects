@@ -13,8 +13,10 @@ the required disclaimers, and the house style (Australian/UK spelling, no
 em dashes, reading level). If it does not exist, stop and report
 `CONTENT-REVIEW.md missing — cannot review without domain rules`.
 
-Then read every user-facing string, guidance text, notification copy and
-empty/error message added or changed in this phase.
+Then read the copy in scope. The parent tells you the scope: a phase (every
+user-facing string, guidance text, notification copy and empty/error message
+added or changed in it) or an audit (all of them). If the parent gave no
+scope, ask for it.
 
 Flag:
 - claims stated with more certainty than the sources support

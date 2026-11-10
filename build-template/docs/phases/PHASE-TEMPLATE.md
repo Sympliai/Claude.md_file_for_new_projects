@@ -1,5 +1,5 @@
 # Phase NN — <name>
-Status: PLANNED | APPROVED | IN PROGRESS | DONE (<date>)
+Status: PLANNED | APPROVED | IN PROGRESS | AWAITING REVIEW | DONE (<date>)
 Depends on: <phase IDs or none>
 
 ## Goal (one sentence, one measurable end state)
@@ -12,6 +12,15 @@ Depends on: <phase IDs or none>
 
 ## Acceptance criteria covered
 - AC-0xx, AC-0xx (from docs/ACCEPTANCE-CRITERIA.md)
+
+## Progress
+Tick each line in the commit that completes it. A new session resumes from
+the first unticked line.
+- [ ] <one line per item under Included>
+- [ ] Automated checks green
+- [ ] Flows executed and evidence captured
+- [ ] Reviewers run; findings fixed or recorded
+- [ ] Checkpoint written
 
 ## Automated checks
 - typecheck · lint · unit/integration tests · build (commands in CLAUDE.md)
@@ -26,16 +35,17 @@ Depends on: <phase IDs or none>
 - Logs/console inspected for: <errors to look for>
 
 ## Reviewers
-- workflow-tester, visual-reviewer, <security-reviewer | accessibility-reviewer | content-reviewer | phase-auditor as relevant>
+- workflow-tester, visual-reviewer, <ux-reviewer | security-reviewer | accessibility-reviewer | content-reviewer as relevant>, phase-auditor (always, last)
 
 ## Definition of done
 - All listed AC pass with observed evidence
 - All automated checks exit 0
 - All reviewer findings fixed or documented with reason
-- CHECKPOINT-NN.md committed
+- CHECKPOINT-NN.md committed and the phase branch pushed
 
 ## Git
-- Branch: main (solo) | feature/phase-NN
+- Branch: `phase-NN-<slug>`, created from `main` when the phase starts; merged
+  to `main` only after the gate is approved
 - Commit prefix: `feat(phase-NN):`
 
 ## Turn / stop limit for /goal

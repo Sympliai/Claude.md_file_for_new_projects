@@ -11,13 +11,14 @@ make Claude run the checks and show results.
 |---|---|
 | Next turn starts automatically | `/goal <condition>` |
 | Tool calls don't prompt you | Run the session in Auto mode (desktop: the mode selector next to the send button; terminal: Shift+Tab or `--permission-mode auto`). `/goal` does NOT change permission mode. In Manual mode it stops and asks. |
-| Hard guardrails regardless of mode | `~/.claude/settings.json` deny rules (force-push, `rm -rf`, `.env` reads, hard reset). Deny rules are enforced by Claude Code in every mode. |
+| Hard guardrails regardless of mode | `~/.claude/settings.json` deny rules (force-push, `rm -rf`, `.env` reads, hard reset), enforced by Claude Code in every mode. The guard hook blocks any other secret-file read and any commit containing a key-shaped string. The project's `ask` rule stops a push to `main` for your click. |
 | Bounded run | A turn clause inside the condition: `or stop after 25 turns`. |
-| Recoverable | Clean `git status` first; work on a branch or worktree; commits at each increment; checkpoint report at the end. |
+| Recoverable | Clean `git status` first. The phase runs on its own `phase-NN-<slug>` branch, so `main` is untouched until you approve the gate. Commits at each increment tick the phase's Progress list; checkpoint report at the end. |
 | Subagents finish before judging | If a subagent/background command is running, evaluation is skipped until it ends. Normal. |
 
 ## Before you start a run (2-minute checklist)
-1. `git status` clean; branch created (or main if solo and comfortable).
+1. `git status` clean on `main`. The run creates (or resumes) the
+   `phase-NN-<slug>` branch itself.
 2. Phase file is `APPROVED`, has a Ready-to-run /goal, and a turn limit.
 3. Verification tooling proven: dev server, emulator/browser, one trivial
    flow, all passing.
@@ -71,9 +72,16 @@ check can assert; vague "make it good" work.
 - Fixes one test, breaks another, loops. The turn limit and the
   `phase-auditor` are your brakes.
 - Credit exhaustion, auth failure, context overflow or unavailable model
-  clear the goal. Re-set it after fixing the cause; progress is in git.
+  clear the goal. Re-set it after fixing the cause; progress is in git, and
+  the phase file's Status and Progress ticks tell the next run where to
+  resume.
+- The run stops on a permission prompt to push `main`. That prompt is the
+  gate working: a phase run should never push `main`. Decline it, and look
+  at why the run tried.
 - Reviewers are only as read-only as their tools. `security-reviewer`,
-  `visual-reviewer`, `accessibility-reviewer` and `content-reviewer` have no
-  Bash. `workflow-tester` and `phase-auditor` need Bash and are restricted by
-  `disallowedTools` plus instruction; review their output, not just their
+  `visual-reviewer`, `ux-reviewer`, `accessibility-reviewer` and
+  `content-reviewer` have no Bash. `workflow-tester` and `phase-auditor`
+  need Bash; the guard hook's read-only mode blocks the commands that change
+  files or git state (writing evidence under `artifacts/` is allowed). It is
+  a guard rail, not a sandbox, so still review their output, not just their
   verdict.

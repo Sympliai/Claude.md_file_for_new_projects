@@ -60,7 +60,8 @@ uncertainty is shown and which content needs expert review.
 1. Copy `~/.claude/templates/build/docs/` into `./docs/` (skip files that
    already exist) and fill PRODUCT-SPEC.md, USER-FLOWS.md,
    ACCEPTANCE-CRITERIA.md and RISKS.md from the approved draft, marking
-   anything unconfirmed `ASSUMPTION:` or `OPEN:`.
+   anything unconfirmed `ASSUMPTION:` or `OPEN:`. Set the project name in
+   every copied file, including the empty `BACKLOG.md`.
 2. If the product gives domain guidance or copy needing review, create
    `docs/CONTENT-REVIEW.md` (domain, trusted sources, required disclaimers,
    house style).
