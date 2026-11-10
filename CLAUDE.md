@@ -17,7 +17,8 @@ and apply here too.
 - `README.md` is the reference for the layout and pipeline;
   `new-project-guide.md` is the beginner walkthrough; `GOAL-GUIDE.md` covers
   unattended runs.
-- Backlog: none yet. Create `docs/BACKLOG.md` when the first item appears.
+- Backlog: `docs/BACKLOG.md` — improvements not yet made and behaviours not
+  yet verified in a live session. Skim it before starting work on the kit.
 
 ## Commands (run before reporting done)
 
