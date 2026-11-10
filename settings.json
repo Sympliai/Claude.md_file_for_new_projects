@@ -15,6 +15,12 @@
       "Bash(git commit *)",
       "Bash(git push origin main)",
       "Bash(git push -u origin main)",
+      "Bash(git switch main)",
+      "Bash(git switch phase-*)",
+      "Bash(git switch -c phase-*)",
+      "Bash(git push origin phase-*)",
+      "Bash(git push -u origin phase-*)",
+      "Bash(git merge --no-ff phase-*)",
       "Bash(npm install)",
       "Bash(npm install *)",
       "Bash(npm run build)",
@@ -22,6 +28,9 @@
       "Bash(npm run test)",
       "Bash(npm run typecheck)",
       "Bash(npm test)",
+      "Bash(npm audit)",
+      "Bash(npm audit --omit=dev)",
+      "Bash(npm outdated)",
       "Bash(npx tsc *)",
       "Bash(npx vitest *)",
       "Bash(npx eslint *)",
@@ -33,7 +42,8 @@
       "Bash(maestro --version)",
       "Bash(xcrun simctl list *)",
       "Bash(adb devices)",
-      "Bash(claude --version)"
+      "Bash(claude --version)",
+      "Bash(python3 ~/.claude/hooks/kit/kit-guard.py scan-repo)"
     ],
     "deny": [
       "Bash(git push --force *)",
@@ -57,7 +67,36 @@
       "Bash(git checkout -- *)",
       "Bash(git restore *)",
       "Read(**/PROJECT KEYS/**)",
-      "Read(**/Project Keys/**)"
+      "Read(**/Project Keys/**)",
+      "Read(.env.staging)",
+      "Read(.env.test)",
+      "Read(.env.preview)",
+      "Read(.env.development.local)",
+      "Read(.env.production.local)",
+      "Read(.env.test.local)",
+      "Read(.envrc)",
+      "Read(**/.env.production)",
+      "Read(**/.env.development)",
+      "Read(**/.env.staging)",
+      "Read(**/.env.test)",
+      "Read(**/.env.preview)",
+      "Read(**/.env.development.local)",
+      "Read(**/.env.production.local)",
+      "Read(**/.env.test.local)",
+      "Read(**/.envrc)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Read|Edit|Write|MultiEdit|NotebookEdit|Grep|Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$HOME/.claude/hooks/kit/kit-guard.py\" secrets"
+          }
+        ]
+      }
     ]
   }
 }
