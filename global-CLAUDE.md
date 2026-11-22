@@ -172,6 +172,13 @@ worst severity among them. For a full review of a codebase, suggest `/audit`.
 - New project: creating the Vercel project and linking the GitHub repo is
   outward-facing. Propose it and wait for a yes. Use the Vercel connector if
   this session has it; otherwise list the steps for the user.
+- Gate production deploys in the Vercel build: set `buildCommand` in
+  `vercel.json` to run typecheck, lint and unit tests before the build (run
+  `/deploy-gate`). A failing check then fails the deployment and the last good
+  version stays live. The push to `main` is still accepted. On a private
+  repository, GitHub's required status checks need GitHub Pro, so do not
+  suggest branch protection as the gate. After any push to `main`, check the
+  deployment state (Vercel tools or dashboard) and report it.
 - Direct deploy from the CLI (`vercel --prod`) only when the user asks for it
   in that message, and only after `vercel --version` shows the CLI is
   installed. Never assume the CLI or the connector is available.

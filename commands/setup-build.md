@@ -58,7 +58,11 @@ Present, in chat:
    them covers (name, purpose, tools, model).
 5. **Branches and deploys**: say which branch deploys to production (usually
    `main`), that each phase is built on its own `phase-NN-<slug>` branch, and
-   that this project will ask me before any push to `main`.
+   that this project will ask me before any push to `main`. If it deploys to
+   Vercel, also propose the deploy gate (`/deploy-gate`: typecheck, lint and
+   unit tests run inside the Vercel build) and the CI workflow template
+   (`~/.claude/templates/build/ci/ci.yml`), and say why the gate is in Vercel
+   (GitHub required checks need GitHub Pro on private repositories).
 6. **Files to be created** and **commands to be run**, in order.
 Then ask: "Approve this setup?" and stop.
 
@@ -88,7 +92,8 @@ Then ask: "Approve this setup?" and stop.
    a tool works until you have run a trivial flow with it and seen it pass.
 6. Create any approved project-specific agents in `.claude/agents/` with
    valid frontmatter for the installed version. Reviewers get no Edit/Write.
-7. Run the foundation checks once (typecheck/lint/test/build if a project
+7. If I approved the deploy gate, follow `/deploy-gate` and copy the CI
+   template to `.github/workflows/ci.yml`. Then run the foundation checks once (typecheck/lint/test/build if a project
    exists) and report observed results.
 8. Commit `chore: configure phased build workflow`.
 9. Tell me the next step is `/plan-phases` and stop.

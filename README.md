@@ -47,7 +47,7 @@ bash install.sh --check
 ```
 
 Verify after installing (start a new session first):
-- Type `/`: `/start`, `/audit`, `/discover` and the other commands should be listed.
+- Type `/`: `/start`, `/audit`, `/discover`, `/deploy-gate` and the other commands should be listed.
 - Ask Claude: "List the subagents you can use." Seven reviewers should appear.
 - In a scratch folder containing a file named `.env.local`, ask Claude to
   read it. It should be refused with a "Blocked by kit-guard" message.

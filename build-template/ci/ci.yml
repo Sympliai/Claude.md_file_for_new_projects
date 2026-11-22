@@ -1,0 +1,37 @@
+# Quality checks on every push and pull request. Copy to `.github/workflows/ci.yml` in the project.
+#
+# - Edit the script names below to match package.json (check, lint, test, build are the kit's defaults).
+# - It runs the QUICK checks only (typecheck, lint, unit tests, build). Slow browser tests stay a manual step.
+# - On a private repository the GitHub Free plan cannot make this check "required" (branch protection and rulesets need
+#   GitHub Pro, or a public repository), so it reports but cannot stop a merge. The check that actually stops a bad
+#   production deploy is the Vercel build command (see /deploy-gate).
+# - Read-only token, no secrets: keep it that way. Pin each `uses:` to a full commit SHA (with a `# vN` comment) and add
+#   a Dependabot entry for the github-actions ecosystem when you can.
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Typecheck
+        run: npm run check
+      - name: Lint
+        run: npm run lint
+      - name: Unit tests
+        run: npm test
+      - name: Build
+        run: npm run build

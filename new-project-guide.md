@@ -120,7 +120,7 @@ version of the kit.
 ### Step 7: Check it worked
 1. Quit Claude Desktop completely (Claude menu, then Quit) and open it again. This makes it load the new files.
 2. Click the **Code** tab, choose any folder, and start a new session.
-3. In the message box, type `/`. A list should pop up that includes `/start`, `/audit`, `/discover`, `/setup-build`, `/plan-phases`, `/run-phase`, `/new-agent` and `/checkpoint`.
+3. In the message box, type `/`. A list should pop up that includes `/start`, `/audit`, `/discover`, `/setup-build`, `/plan-phases`, `/run-phase`, `/new-agent`, `/deploy-gate` and `/checkpoint`.
 4. Type this and send it: `List the subagents you can use.` Claude should name seven: workflow-tester, visual-reviewer, ux-reviewer, security-reviewer, accessibility-reviewer, content-reviewer and phase-auditor.
 
 If both checks pass, the kit is installed. When you update the kit on GitHub,
